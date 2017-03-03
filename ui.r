@@ -2,6 +2,8 @@ library("shiny")
 library("dplyr")
 library("ggplot2")
 
+median.range <- range(data$Median)
+
 
 ui <- fluidPage(
   
@@ -14,7 +16,10 @@ ui <- fluidPage(
       
       p("Majors"),
       
-      radioButtons('major.select', label = "Select a Major:", choices = unique(data$Major_category))
+      radioButtons('major.select', label = "Select a Major:", choices = unique(data$Major_category)),
+      
+      sliderInput('median.range', label = "Median Pay", min = median.range[1], max = median.range[2], value = median.range)
+      
       
     ),
     
@@ -24,9 +29,11 @@ ui <- fluidPage(
       
       tabsetPanel(
         
-        tabPanel("Plot", p("Plot of the majors by employment rate")),
+        tabPanel("Table", p("Table of Majors"), tableOutput('table')),
         
-        tabPanel("Histogram", p("Histogram of majors by salary"))
+        tabPanel("Plot", p("Plot of the majors by employment rate"), plotOutput('graph')),
+        
+        tabPanel("Histogram", p("Histogram of majors by salary"), plotOutput('histogram'))
       )
     )
   )
