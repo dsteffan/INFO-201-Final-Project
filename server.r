@@ -8,6 +8,7 @@ server <- function(input, output) {
   filtered.pay <- reactive({
     pay <- data %>%
       filter(Median >= input$median.range[1] & Median <= input$median.range[2]) 
+    pay$percent_college_jobs <- round(100 * pay$College_jobs / (pay$College_jobs + pay$Non_college_jobs), digits = 2)
     return(pay)
   })
   
@@ -44,7 +45,8 @@ server <- function(input, output) {
 
   output$x_value <- renderText({
     if (is.null(input$hist.click$x)) {
-      return()
+      text <- "Click on the bars for more information"
+      return(text)
     } else {
       lvls <- filter(filtered.pay(), Major_category == filteredMajor())$Major
       name <- lvls[round(input$hist.click$x)]
@@ -55,6 +57,31 @@ server <- function(input, output) {
     }
   })
   
+  
+   output$college.jobs <- renderPlot({
+    ggplot(data = filter(filtered.pay(), Major_category == filteredMajor())) + 
+      geom_bar(mapping = aes(x = reorder(Major, Rank), y = percent_college_jobs), stat = "identity") +
+      labs(title = ("Majors vs Percent of Jobs Requring College Degree"), y = "Percent of Jobs Requiring College Degree (%)")
+  })  
+
+   percent.info <- reactive({
+     if (is.null(input$percent.click$x)) {
+       text <- "Click on the bars for more information"
+       return(text)
+     } else {
+       lvls <- filter(filtered.pay(), Major_category == filteredMajor())$Major
+       name <- lvls[round(input$percent.click$x)]
+       paste0("You've selected ", tolower(name), "! In this major, ",
+              filtered.pay()[filtered.pay()$Major == name, "percent_college_jobs"], "% have jobs requiring a college degree.",
+              data[data$Major == name, 'College_jobs'], " have jobs requiring a college degree while ",
+              data[data$Major == name, 'Non_college_jobs'], " do not have jobs requiring their college degree.")
+     }
+   })   
+
+   
+   output$info <- renderText({
+     return(percent.info())
+   })
 }
 
 shinyServer(server)
