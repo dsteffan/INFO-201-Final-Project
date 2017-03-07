@@ -29,7 +29,7 @@ server <- function(input, output) {
     ggplot(data = filter(filtered.pay(), Major_category == filteredMajor())) + 
       geom_bar(mapping = aes(x = reorder(Major, Rank), y = Median), stat = "identity") +
       geom_errorbar(aes(x = Major, ymin = P25th, ymax = P75th), width = 0.5) +
-      labs(title = ("Median Pay"))
+      labs(title = ("Median Pay"), x = "Majors")
   })  
 
   output$table <- renderTable({
@@ -61,7 +61,7 @@ server <- function(input, output) {
    output$college.jobs <- renderPlot({
     ggplot(data = filter(filtered.pay(), Major_category == filteredMajor())) + 
       geom_bar(mapping = aes(x = reorder(Major, Rank), y = percent_college_jobs), stat = "identity") +
-      labs(title = ("Majors vs Percent of Jobs Requring College Degree"), y = "Percent of Jobs Requiring College Degree (%)")
+      labs(title = ("Majors vs Percent of Jobs Requring College Degree"), y = "Percent of Jobs Requiring College Degree (%)", x = "Majors")
   })  
 
    percent.info <- reactive({
