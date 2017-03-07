@@ -37,7 +37,7 @@ ui <- fluidPage(
                  plotOutput('histogram', click = 'hist.click'), 
                  verbatimTextOutput("x_value")),
         
-        tabPanel("College Jobs", p("Bar chart of percent of jobs actually requiring their college degree"), 
+        tabPanel("Jobs Requiring Degree", p("Bar chart of percentage of jobs requiring college degree based on major."), 
                  plotOutput('college.jobs', click = 'percent.click'),
                  verbatimTextOutput("info"))
       )
