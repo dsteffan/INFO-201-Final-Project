@@ -33,7 +33,9 @@ ui <- fluidPage(
         
         tabPanel("Plot", p("Plot of the majors by employment rate"), plotOutput('graph')),
         
-        tabPanel("Histogram", p("Histogram of majors by salary"), plotOutput('histogram'))
+        tabPanel("Bar Chart", p("Bar chart of majors by salary"), 
+                 plotOutput('histogram', click = 'hist.click'), 
+                 verbatimTextOutput("x_value"))
       )
     )
   )
