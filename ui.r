@@ -35,11 +35,13 @@ ui <- fluidPage(
         
         tabPanel("Bar Chart", p("Bar chart of majors by salary"), 
                  plotOutput('histogram', click = 'hist.click'), 
-                 verbatimTextOutput("x_value")),
+                 textOutput("x_value")),
         
-        tabPanel("Jobs Requiring Degree", p("Bar chart of percentage of jobs requiring college degree based on major."), 
+        tabPanel("Jobs Requiring Degree", p("This bar chart takes the data from American Community Survey 2010-2012 Public Use Microdata Series,
+                                            organized by FiveThirtyEight and displays the percentage of jobs requiring college degrees given a major
+                                            category."), 
                  plotOutput('college.jobs', click = 'percent.click'),
-                 verbatimTextOutput("info"))
+                 textOutput("info"))
       )
     )
   )

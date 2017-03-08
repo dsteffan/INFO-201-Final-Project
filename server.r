@@ -28,6 +28,7 @@ server <- function(input, output) {
   output$histogram <- renderPlot({
     ggplot(data = filter(filtered.pay(), Major_category == filteredMajor())) + 
       geom_bar(mapping = aes(x = reorder(Major, Rank), y = Median), stat = "identity") +
+      coord_flip() +
       geom_errorbar(aes(x = Major, ymin = P25th, ymax = P75th), width = 0.5) +
       labs(title = ("Median Pay"), x = "Majors")
   })  
@@ -39,20 +40,16 @@ server <- function(input, output) {
     return(filtered.table)
   })
   
-  output$hist.desc <- reactive({
-    input$hist.click$y
-  })
-
   output$x_value <- renderText({
-    if (is.null(input$hist.click$x)) {
+    if (is.null(input$hist.click$y)) {
       text <- "Click on the bars for more information"
       return(text)
     } else {
       lvls <- filter(filtered.pay(), Major_category == filteredMajor())$Major
-      name <- lvls[round(input$hist.click$x)]
+      name <- lvls[round(input$hist.click$y)]
       paste0("You've selected ", tolower(name), "! The median pay is $",
              data[data$Major == name, 'Median'], ", rank ",  data[data$Major == name, "Rank"], " overall.\n(25th percentile = $",
-             data[data$Major == name, 'P25th'], ",75th percentile = $",
+             data[data$Major == name, 'P25th'], ", 75th percentile = $",
              data[data$Major == name, 'P75th'], ")")
     }
   })
@@ -61,16 +58,17 @@ server <- function(input, output) {
    output$college.jobs <- renderPlot({
     ggplot(data = filter(filtered.pay(), Major_category == filteredMajor())) + 
       geom_bar(mapping = aes(x = reorder(Major, Rank), y = percent_college_jobs), stat = "identity") +
+       coord_flip() +
       labs(title = ("Majors vs Percent of Jobs Requring College Degree"), y = "Percent of Jobs Requiring College Degree (%)", x = "Majors")
   })  
 
    percent.info <- reactive({
-     if (is.null(input$percent.click$x)) {
+     if (is.null(input$percent.click$y)) {
        text <- "Click on the bars for more information"
        return(text)
      } else {
        lvls <- filter(filtered.pay(), Major_category == filteredMajor())$Major
-       name <- lvls[round(input$percent.click$x)]
+       name <- lvls[round(input$percent.click$y)]
        paste0("You've selected ", tolower(name), "! In this major, ",
               filtered.pay()[filtered.pay()$Major == name, "percent_college_jobs"], "% have jobs requiring a college degree.",
               data[data$Major == name, 'College_jobs'], " have jobs requiring a college degree while ",
