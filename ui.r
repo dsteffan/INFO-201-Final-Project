@@ -12,10 +12,11 @@ ui <- fluidPage(
   sidebarLayout(
     
     sidebarPanel(
-      h1("Narrow Your Search"),
+      h1("Sidebar Panel"),
       
-      radioButtons('major.select', label = "Select a Major:", choices = unique(data$Major_category)),
+      p("Majors"),
       
+      selectInput('major.choice', label = "Select Major Category:", choices = majors, selected = 'All'),
       sliderInput('median.range', label = "Median Pay", min = median.range[1], max = median.range[2], value = median.range)
       
       
@@ -36,9 +37,7 @@ ui <- fluidPage(
                                   p("Data organized by FiveThirtyEight: https://github.com/fivethirtyeight/data/tree/master/college-majors")),
         
         tabPanel("Major Information", p("Table of Majors"), tableOutput('table')),
-        
-        tabPanel("Employment", p("Plot of the majors by employment rate"), plotOutput('graph')),
-        
+        tabPanel("Employment", p("Plot of the majors by employment rate"), plotlyOutput('graph')),
         tabPanel("Salary", p("Bar chart of majors by salary"), 
                  plotOutput('histogram', click = 'hist.click'), 
                  textOutput("x_value")),
@@ -54,3 +53,4 @@ ui <- fluidPage(
 )
 
 shinyUI(ui)
+
