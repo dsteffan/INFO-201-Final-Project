@@ -16,8 +16,7 @@ ui <- fluidPage(
       
       p("Majors"),
       
-      radioButtons('major.select', label = "Select a Major:", choices = unique(data$Major_category)),
-      
+      selectInput('major.choice', label = "Select Major Category:", choices = majors, selected = 'All'),
       sliderInput('median.range', label = "Median Pay", min = median.range[1], max = median.range[2], value = median.range)
       
       
@@ -40,3 +39,4 @@ ui <- fluidPage(
 )
 
 shinyUI(ui)
+
