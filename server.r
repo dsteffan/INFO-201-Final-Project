@@ -1,6 +1,8 @@
 library("shiny")
 library("dplyr")
 library("ggplot2")
+library("plotly")
+
 
 
 server <- function(input, output) {
@@ -23,15 +25,25 @@ server <- function(input, output) {
     return(filtered.table)
   })
   
-  output$graph <-  renderPlot({
-    ggplot(data = major(), mapping = aes(x = Total, y = Unemployment_rate, color = Major, size = 7)) +
-      scale_color_brewer(palette = "Set1") +
-      theme(legend.position="none") +
-      geom_point() +
-      labs(title = ("Total in Major vs Unemployment Rate"), 
-           x = "Total",
-           y = "Unemployment Rate")
-    
+  output$graph <-  renderPlotly({
+    f <- list(
+      family = "Courier New, monospace",
+      size = 16,
+      color = "#7f7f7f"
+    )
+    x <- list(
+      title = "Total",
+      titlefont = f
+    )
+    y <- list(
+      title = "Unemployment Rate",
+      titlefont = f
+    )
+    plot_ly(major(), x = major()$Total, y = major()$Unemployment_rate, type = 'scatter', 
+            color = major()$Major, hoverinfo = 'text', text = major()$Major) %>% 
+      layout(showlegend = FALSE) %>% 
+      layout(xaxis = x, yaxis = y) %>% 
+      layout(title= 'Total in Major vs Unemployment Rate')
     
   })
   
